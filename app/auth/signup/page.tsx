@@ -1,11 +1,17 @@
 'use client'
 
+import type { Metadata } from 'next'
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
+
+export const metadata: Metadata = {
+  title: 'Sign up',
+  robots: { index: false, follow: false },
+}
 
 export default function SignupPage() {
   const [fullName, setFullName] = useState('')
@@ -23,25 +29,18 @@ export default function SignupPage() {
     setError('')
     setLoading(true)
     const { error } = await supabase.auth.signUp({
-      email,
-      password,
+      email, password,
       options: { data: { full_name: fullName } },
     })
-    if (error) {
-      setError(error.message)
-      setLoading(false)
-    } else {
-      setSuccess(true)
-    }
+    if (error) { setError(error.message); setLoading(false) }
+    else setSuccess(true)
   }
 
   async function handleGoogle() {
     setGoogleLoading(true)
     await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?next=/dashboard`,
-      },
+      options: { redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?next=/dashboard` },
     })
   }
 
@@ -53,7 +52,6 @@ export default function SignupPage() {
           <h2 className="text-xl font-bold text-white mb-2">Check your email</h2>
           <p className="text-slate-400 text-sm">
             We sent a confirmation link to <strong className="text-white">{email}</strong>.
-            Click it to activate your account.
           </p>
           <Link href="/auth/login" className="block mt-6">
             <Button variant="secondary" className="w-full">Back to login</Button>
@@ -73,12 +71,7 @@ export default function SignupPage() {
         <h1 className="text-xl font-bold text-white mb-1">Create your account</h1>
         <p className="text-slate-400 text-sm mb-6">Start with 3 free audits — no card needed</p>
 
-        <Button
-          onClick={handleGoogle}
-          loading={googleLoading}
-          variant="secondary"
-          className="w-full mb-4"
-        >
+        <Button onClick={handleGoogle} loading={googleLoading} variant="secondary" className="w-full mb-4">
           <svg className="w-4 h-4" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
             <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -95,47 +88,19 @@ export default function SignupPage() {
         </div>
 
         <form onSubmit={handleSignup} className="flex flex-col gap-4">
-          <Input
-            label="Full name"
-            id="fullName"
-            type="text"
-            required
-            placeholder="Jane Smith"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-          />
-          <Input
-            label="Email"
-            id="email"
-            type="email"
-            required
-            placeholder="you@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <Input
-            label="Password"
-            id="password"
-            type="password"
-            required
-            placeholder="Min. 8 characters"
-            minLength={8}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-
+          <Input label="Full name" id="fullName" type="text" required placeholder="Jane Smith"
+            value={fullName} onChange={(e) => setFullName(e.target.value)} />
+          <Input label="Email" id="email" type="email" required placeholder="you@example.com"
+            value={email} onChange={(e) => setEmail(e.target.value)} />
+          <Input label="Password" id="password" type="password" required placeholder="Min. 8 characters"
+            minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} />
           {error && <p className="text-fail text-sm">{error}</p>}
-
-          <Button type="submit" loading={loading} className="w-full">
-            Create account
-          </Button>
+          <Button type="submit" loading={loading} className="w-full">Create account</Button>
         </form>
 
         <p className="text-slate-400 text-sm text-center mt-5">
           Already have an account?{' '}
-          <Link href="/auth/login" className="text-accent hover:text-accent-light transition-colors">
-            Sign in
-          </Link>
+          <Link href="/auth/login" className="text-accent hover:text-accent-light transition-colors">Sign in</Link>
         </p>
       </div>
     </div>
