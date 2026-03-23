@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { scrapeUrl } from '@/lib/scraper'
-import { auditLandingPage } from '@/lib/anthropic'
+import { auditLandingPage } from '@/lib/groq'
 
 export async function POST(req: NextRequest) {
   try {
