@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/server'
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 export async function POST(req: NextRequest) {
   try {
     const { email } = await req.json() as { email: string }
@@ -24,6 +22,7 @@ export async function POST(req: NextRequest) {
 
     // Send welcome email if Resend is configured
     if (process.env.RESEND_API_KEY) {
+      const resend = new Resend(process.env.RESEND_API_KEY)
       await resend.emails.send({
         from: 'AuditMyLanding <hello@auditmylanding.com>',
         to: email,
