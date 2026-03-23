@@ -1,17 +1,11 @@
 'use client'
 
-import type { Metadata } from 'next'
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
-
-export const metadata: Metadata = {
-  title: 'Sign up',
-  robots: { index: false, follow: false },
-}
 
 export default function SignupPage() {
   const [fullName, setFullName] = useState('')
